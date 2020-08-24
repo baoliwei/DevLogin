@@ -1,0 +1,16 @@
+{
+  "name": "devloginplugin",
+  "version": "0.01",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "puppeteer": "1.20.0",
+    "puppeteer-core": "1.20.0",
+    "tapable": "^1.1.3"
+  },
+  "author": "",
+  "license": "ISC"
+}
