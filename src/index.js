@@ -25,13 +25,18 @@ class DevLoginPlugin {
         }
         const defaultUserOptions = { // 用于获取登录凭证的配置
             cookies:['session'], // 要获取的cookie名称
-            getCookieUrl: '', // 要获取cookie的url
+            origin: '', // 要获取cookie的url
             setCookieUrl: '', // 要设置cookie的url
             userName: '', // 登录用户名
             password: '', // 登录密码
             verificationCode: '1', // 登录时的验证码
             closeDefaultLogin: false,
-            closeDefaultVerificationCode: false
+            closeDefaultVerificationCode: false,
+            userNameEl: '#username', // 用户名输入框dom标识
+            passwordEl: '#password', // 密码输入框dom标识
+            loginEl: '.btn-submit', // 登录按钮dom标识
+            verificationCodedEl: '#password', // 验证码输入框dom标识
+            verificationCodeBtnEl: '.btn-submit' // 确认验证码按钮dom标识
         }
         this[init] = false
         this.plugins = plugins instanceof Array ? plugins : [] // plugins必须是数组，数组项必须是函数。
@@ -54,13 +59,16 @@ class DevLoginPlugin {
                 callback()
                 return
             }
-            this[init] = true
-            await this.startBrowser()
-            await this.startPage()
-            await this.registerHook() // 注册hooks
-            await this.autoLogin()
+            await this.run()
             callback()
           }.bind(this));
+    }
+    async run () {
+        this[init] = true
+        await this.startBrowser()
+        await this.startPage()
+        await this.registerHook() // 注册hooks
+        await this.autoLogin()
     }
     async registerHook() { // 注册hook
         // 跳转至原始站点
@@ -85,8 +93,8 @@ class DevLoginPlugin {
             let item = this.plugins[index]
             typeof item === 'function'
             && item.length === 0 
-                ? result = await item.call(this, this.browser, this.page) || {} 
-                : result = await this.page.evaluate(item) || {}
+                ? result = await this.page.evaluate(item) || {}
+                : result = await item.call(this, this.browser, this.page) || {} 
             if (result.nextPage) { // 如果需要跳转至下一个页面
                 await this.page.waitForNavigation(['load', 'domcontentloaded', 'networkidle0'])
             }
@@ -144,24 +152,24 @@ class DevLoginPlugin {
     }
     async gotoOriginSite(browser, page) { // 跳转至原始站点
         await Promise.all([ // 跳转至获取cookie的页面
-            page.goto(this.userOptions.getCookieUrl),
+            page.goto(this.userOptions.origin),
             page.waitForNavigation({
                 waitUntil: ['load', 'domcontentloaded', 'networkidle0']
             })
         ])
     }
     async login(browser, page) { // 登录
-        await page.type('#username', this.userOptions.userName)
-        await page.type('#password', this.userOptions.password)
+        await page.type(this.userOptions.userNameEl, this.userOptions.userName)
+        await page.type(this.userOptions.passwordEl, this.userOptions.password)
         await Promise.all([
-            page.click('.btn-submit'),
+            page.click(this.userOptions.loginEl),
             page.waitForNavigation(['load', 'domcontentloaded', 'networkidle0'])
         ]);
     }
     async verificationCode(browser, page) { // 验证码
-        await page.type('#captcha', this.userOptions.verificationCode)
+        await page.type(this.userOptions.verificationCodedEl, this.userOptions.verificationCode)
         await Promise.all([
-            page.click('.btn-submit'),
+            page.click(this.userOptions.verificationCodeBtnEl),
             page.waitForNavigation(['load', 'domcontentloaded', 'networkidle0'])
         ]);
         
@@ -188,8 +196,8 @@ new DevLoginPlugin(
         closeDefaultLogin: true,
         closeDefaultVerificationCode: true,
         cookies:['session'], // 要获取的cookie名称
-        getCookieUrl: 'final url', // 要获取cookie的url
-        // getCookieUrl: 'final url', // 要获取cookie的url
+        origin: 'final url', // 要获取cookie的url
+        // origin: 'final url', // 要获取cookie的url
         setCookieUrl: 'http://localhost:8001/', // 要设置cookie的url
         userName: 'username', // 登录用户名
         password: 'password', // 登录密码
