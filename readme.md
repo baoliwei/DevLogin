@@ -52,19 +52,19 @@ const devLogin = new DevLogin(params)
 ## userOptions
 表示了使用者登录原网站时使用的数据，默认参数如下：
 ```
-    cookies:['session'], // 类型：数组。    描述：要获取的cookie（登录凭证）名称
-    originUrl: '', // 类型：字符串。 描述：源站点url（要获取cookie的url）
-    finalUrl: '', // 类型：字符串。 描述：最终要使用的站点url（要设置cookie的url）
-    userName: '', // 类型：字符串。 描述：登录用户名
-    password: '', //  类型：字符串。 描述：登录密码
-    verificationCode: '', //  类型：字符串。 描述：登录时的验证码
-    closeDefaultLogin: false,  类型：布尔。 描述：是否关闭默认的登录流程。
-    closeDefaultVerificationCode: false,  类型：布尔。 描述：是否关闭默认的验证码流程。
-    userNameEl: '#username', // 类型：字符串。 描述：用户名输入框dom标识
-    passwordEl: '#password', // 类型：字符串。 描述：密码输入框dom标识
-    loginEl: '.btn-submit', // 类型：字符串。 描述：登录按钮dom标识
-    verificationCodedEl: '#password', // 类型：字符串。 描述：验证码输入框dom标识
-    verificationCodeBtnEl: '.btn-submit' // 类型：字符串。 描述：确认验证码按钮dom标识
+    cookies:['session'], // 类型：数组。 默认值：['session']    描述：要获取的cookie（登录凭证）名称
+    originSiteUrl: '', // 类型：字符串。 默认值：''  描述：源站点url（要获取cookie的url）
+    finalSiteUrl: '', // 类型：字符串。 默认值：'' 描述：最终要使用的站点url（要设置cookie的url）
+    userName: '', // 类型：字符串。 默认值：'' 描述：登录用户名
+    password: '', //  类型：字符串。 默认值：'' 描述：登录密码
+    verificationCode: '', //  类型：字符串。 默认值：'1'  描述：登录时的验证码
+    closeDefaultLogin: false,  类型：布尔。 默认值：false  描述：是否关闭默认的登录流程。
+    closeDefaultVerificationCode: false,  类型：布尔。 默认值：false  描述：是否关闭默认的验证码流程。
+    userNameEl: '#username', // 类型：字符串。 默认值：'#username'  描述：用户名输入框dom标识
+    passwordEl: '#password', // 类型：字符串。 默认值：'#password'  描述：密码输入框dom标识
+    loginEl: '.btn-submit', // 类型：字符串。 默认值：'.btn-submit'  描述：登录按钮dom标识
+    verificationCodedEl: '#captcha', // 类型：字符串。 默认值：'#captcha'  描述：验证码输入框dom标识
+    verificationCodeBtnEl: '.btn-submit' // 类型：字符串。 默认值：'.btn-submit'  描述：确认验证码按钮dom标识
 ```
 ## browserOptions
 
@@ -110,23 +110,22 @@ new DevLoginPlugin(
         closeDefaultLogin: true,
         closeDefaultVerificationCode: true,
         cookies:['session'], // 要获取的cookie名称
-        getCookieUrl: 'final url', // 要获取cookie的url
-        // getCookieUrl: 'final url', // 要获取cookie的url
-        setCookieUrl: 'http://localhost:8001/', // 要设置cookie的url
+        originSiteUrl: 'final url', // 要获取cookie的url
+        finalSiteUrl: 'http://localhost:8001/', // 要设置cookie的url
         userName: 'username', // 登录用户名
         password: 'password', // 登录密码
         verificationCode: '1' // 登录时的验证码
     },
     null, // browserOptions
     [ // plugins
-        function (A) {
+        function () {
             document.querySelector('#username').value = 'username'
             document.querySelector('#password').value = 'password'
             let btn = document.querySelector('.btn-submit')
             btn.click()
             return {nextPage: true}
         },
-        function (A) {
+        function () {
             document.querySelector('#captcha').value = '1'
             // document.querySelector('#password').value = 'aaa111'
             let btn = document.querySelector('.btn-submit')

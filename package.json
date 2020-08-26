@@ -1,5 +1,5 @@
 {
-  "name": "devloginp",
+  "name": "devlogin",
   "version": "0.01",
   "description": "解决了前端开发环境使用代理时登录的问题",
   "main": "index.js",

@@ -25,8 +25,8 @@ class DevLoginPlugin {
         }
         const defaultUserOptions = { // 用于获取登录凭证的配置
             cookies:['session'], // 要获取的cookie名称
-            origin: '', // 要获取cookie的url
-            setCookieUrl: '', // 要设置cookie的url
+            originSiteUrl: '', // 要获取cookie的url
+            finalSiteUrl: '', // 要设置cookie的url
             userName: '', // 登录用户名
             password: '', // 登录密码
             verificationCode: '1', // 登录时的验证码
@@ -35,7 +35,7 @@ class DevLoginPlugin {
             userNameEl: '#username', // 用户名输入框dom标识
             passwordEl: '#password', // 密码输入框dom标识
             loginEl: '.btn-submit', // 登录按钮dom标识
-            verificationCodedEl: '#password', // 验证码输入框dom标识
+            verificationCodedEl: '#captcha', // 验证码输入框dom标识
             verificationCodeBtnEl: '.btn-submit' // 确认验证码按钮dom标识
         }
         this[init] = false
@@ -51,7 +51,7 @@ class DevLoginPlugin {
         this.hooks = {
 			getLoginCert: new AsyncSeriesHook(['browser', 'page']) // 获取登录凭证
         }
-        // this.apply() // 启动
+        this.run() // 启动
     }
     async apply() { // 用于webpack调用
         compiler.hooks.done.tapAsync('DevLoginPlugin', async function(compilation, callback) {
@@ -116,7 +116,7 @@ class DevLoginPlugin {
     }
     async startPage() { // 启动一个页面
         this.page = await this.browser.newPage(); // 新建一个页面
-        
+        // await this.page.setRequestInterception(true)
         this.page.on('error', (err) => { // 当页面崩溃时触发
             console.log('页面崩溃了...:', err)
         })
@@ -126,7 +126,7 @@ class DevLoginPlugin {
         })
     
         this.page.on('requestfailed', (request) => {
-            console.log('页面的请求失败:', request.url())
+            console.log('页面的请求失败:', request.url(), request.failure())
         })
 
         this.page.on('console', msg => {
@@ -143,7 +143,7 @@ class DevLoginPlugin {
         await this.transferLoginCert(this.loginCert) // 转移凭证至最终的站点
 
         await Promise.all([ // 跳转至最终的站点
-            this.page.goto(this.userOptions.setCookieUrl),
+            this.page.goto(this.userOptions.finalSiteUrl),
             this.page.waitForNavigation({
                 waitUntil: ['load', 'domcontentloaded', 'networkidle0']
             })
@@ -152,7 +152,7 @@ class DevLoginPlugin {
     }
     async gotoOriginSite(browser, page) { // 跳转至原始站点
         await Promise.all([ // 跳转至获取cookie的页面
-            page.goto(this.userOptions.origin),
+            page.goto(this.userOptions.originSiteUrl),
             page.waitForNavigation({
                 waitUntil: ['load', 'domcontentloaded', 'networkidle0']
             })
@@ -185,7 +185,7 @@ class DevLoginPlugin {
                     name: cookies[i].name,
                     value: cookies[i].value,
                     expires: cookies[i].expires,
-                    url: this.userOptions.setCookieUrl
+                    url: this.userOptions.finalSiteUrl
                 })
             }
         }
@@ -193,32 +193,33 @@ class DevLoginPlugin {
 }
 new DevLoginPlugin(
     {
-        closeDefaultLogin: true,
+        closeDefaultLogin: false,
         closeDefaultVerificationCode: true,
         cookies:['session'], // 要获取的cookie名称
-        origin: 'final url', // 要获取cookie的url
-        // origin: 'final url', // 要获取cookie的url
-        setCookieUrl: 'http://localhost:8001/', // 要设置cookie的url
-        userName: 'username', // 登录用户名
-        password: 'password', // 登录密码
+        // originSiteUrl: 'http://hhr_oms_testing.shanyishanmei.com', // 要获取cookie的url
+        // originSiteUrl: 'http://172.21.60.209', // 要获取cookie的url
+        originSiteUrl: 'http://www.baidu.com', // 要获取cookie的url
+        finalSiteUrl: 'http://localhost:8000', // 要设置cookie的url
+        userName: 'songrui001', // 登录用户名
+        password: 'aaa111', // 登录密码
         verificationCode: '1' // 登录时的验证码
     },
     null,
     [
-        function (A) {
-            document.querySelector('#username').value = 'username'
-            document.querySelector('#password').value = 'password'
-            let btn = document.querySelector('.btn-submit')
-            btn.click()
-            return {nextPage: true}
-        },
-        function (A) {
-            document.querySelector('#captcha').value = '1'
-            // document.querySelector('#password').value = 'aaa111'
-            let btn = document.querySelector('.btn-submit')
-            btn.click()
-            return {nextPage: true}
-        }
+        // function (A) {
+        //     document.querySelector('#username').value = 'username'
+        //     document.querySelector('#password').value = 'password'
+        //     let btn = document.querySelector('.btn-submit')
+        //     btn.click()
+        //     return {nextPage: true}
+        // },
+        // function (A) {
+        //     document.querySelector('#captcha').value = '1'
+        //     // document.querySelector('#password').value = 'aaa111'
+        //     let btn = document.querySelector('.btn-submit')
+        //     btn.click()
+        //     return {nextPage: true}
+        // }
     ]
 )
 module.exports = DevLoginPlugin;
