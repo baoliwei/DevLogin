@@ -1,4 +1,4 @@
-DevLogin解决了前端开发环境使用代理时登录的问题。
+dev-auto-login解决了前端开发环境使用代理时登录的问题。
 
 # 使用场景
 例如：后端验证登录是a.com站点，前端启用代理最终启动的站点是b.com。
@@ -25,7 +25,7 @@ DevLogin解决了前端开发环境使用代理时登录的问题。
 ## webpack
 
 ```
-const DevLogin = require('dev-login');
+const DevLogin = require('dev-auto-login');
 
 ```
 
@@ -37,7 +37,7 @@ new DevLogin(params)
 ## node
 
 ```
-const DevLogin = require('dev-login');
+const DevLogin = require('dev-auto-login');
 
 ```
 
@@ -105,7 +105,7 @@ const devLogin = new DevLogin(params)
 
 # 示例
 ```
-new DevLoginPlugin(
+new DevLogin(
     { // userOptions
         closeDefaultLogin: true,
         closeDefaultVerificationCode: true,
