@@ -45,7 +45,7 @@ const DevLogin = require('dev-login');
 const devLogin = new DevLogin(params)
 
 ```
-# 使用
+# 配置
 
 构造函数可以接受三个参数，`userOptions`  `browserOptions`  `plugins`
 
