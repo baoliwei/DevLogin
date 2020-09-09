@@ -191,35 +191,4 @@ class DevLoginPlugin {
         }
     }
 }
-new DevLoginPlugin(
-    {
-        closeDefaultLogin: false,
-        closeDefaultVerificationCode: true,
-        cookies:['session'], // 要获取的cookie名称
-        // originSiteUrl: 'http://hhr_oms_testing.shanyishanmei.com', // 要获取cookie的url
-        // originSiteUrl: 'http://172.21.60.209', // 要获取cookie的url
-        originSiteUrl: 'http://www.baidu.com', // 要获取cookie的url
-        finalSiteUrl: 'http://localhost:8000', // 要设置cookie的url
-        userName: 'songrui001', // 登录用户名
-        password: 'aaa111', // 登录密码
-        verificationCode: '1' // 登录时的验证码
-    },
-    null,
-    [
-        // function (A) {
-        //     document.querySelector('#username').value = 'username'
-        //     document.querySelector('#password').value = 'password'
-        //     let btn = document.querySelector('.btn-submit')
-        //     btn.click()
-        //     return {nextPage: true}
-        // },
-        // function (A) {
-        //     document.querySelector('#captcha').value = '1'
-        //     // document.querySelector('#password').value = 'aaa111'
-        //     let btn = document.querySelector('.btn-submit')
-        //     btn.click()
-        //     return {nextPage: true}
-        // }
-    ]
-)
 module.exports = DevLoginPlugin;
