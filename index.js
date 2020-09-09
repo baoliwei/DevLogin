@@ -5,7 +5,7 @@ const {
 
  const init = Symbol('init')
 
-class DevLoginPlugin {
+class DevAutoLogin {
     constructor(userOptions, browserOptions, plugins) { // 初始化
         const defaultBrowserOptions = {
             // executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', // 可运行 Chromium 或 Chrome 可执行文件的路径
@@ -51,9 +51,9 @@ class DevLoginPlugin {
         this.hooks = {
 			getLoginCert: new AsyncSeriesHook(['browser', 'page']) // 获取登录凭证
         }
-        this.run() // 启动
+        // this.run() // 启动
     }
-    async apply() { // 用于webpack调用
+    async apply(compiler) { // 用于webpack调用
         compiler.hooks.done.tapAsync('DevLoginPlugin', async function(compilation, callback) {
             if (this[init]) {
                 callback()
@@ -191,4 +191,19 @@ class DevLoginPlugin {
         }
     }
 }
-module.exports = DevLoginPlugin;
+
+// new DevAutoLogin({ // userOptions
+//     closeDefaultLogin: false,
+//     closeDefaultVerificationCode: true,
+//     cookies:['session'], // 要获取的cookie名称
+//     originSiteUrl: 'http://hhr_oms_testing.shanyishanmei.com', // 要获取cookie的url
+//     finalSiteUrl: 'http://localhost:8000/', // 要设置cookie的url
+//     userName: 'songrui001', // 登录用户名
+//     password: 'aaa111', // 登录密码
+//     verificationCode: '1' // 登录时的验证码
+// },
+// {
+//   executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+// })
+
+module.exports = DevAutoLogin;
