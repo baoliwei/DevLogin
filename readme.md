@@ -88,6 +88,16 @@ const devLogin = new DevLogin(params)
 [配置详细参见](https://zhaoqize.github.io/puppeteer-api-zh_CN/#?product=Puppeteer&version=v1.12.0&show=api-puppeteerlaunchoptions)
 
 [启动启动 Chromium 的参数参见](https://peter.sh/experiments/chromium-command-line-switches/)
+
+ > 注意：`executablePath` 必须配置
+
+例如
+```
+{
+    // 可运行 Chromium 或 Chrome 可执行文件的路径
+    executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+}
+```
 ## plugins
 
 插件会运行在登录行为之前。
@@ -116,7 +126,10 @@ new DevLogin(
         password: 'password', // 登录密码
         verificationCode: '1' // 登录时的验证码
     },
-    null, // browserOptions
+    { // browserOptions
+    // 可运行 Chromium 或 Chrome 可执行文件的路径
+    executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+    },
     [ // plugins
         function () {
             document.querySelector('#username').value = 'username'
