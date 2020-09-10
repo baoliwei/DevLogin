@@ -1,15 +1,15 @@
 dev-auto-login解决了前端开发环境使用代理时登录的问题。
 
 # 使用场景
-例如：后端验证登录是a.com站点，前端启用代理最终启动的站点是b.com。
+例如：后端验证登录是a.com站点，前端启用代理最终启动的站点是b.com，需要登录凭证时获取验证不通过
 
 # 安装
 
-`npm install --save-dev dev-login`
+`npm install --save-dev dev-auto-login`
 
 或
 
-`yarn add --dev dev-login`
+`yarn add --dev dev-auto-login`
 
 # 运行流程
 ## 总体流程
@@ -25,24 +25,25 @@ dev-auto-login解决了前端开发环境使用代理时登录的问题。
 ## webpack
 
 ```
-const DevLogin = require('dev-auto-login');
+const DevAutoLogin = require('dev-auto-login');
 
 ```
 
 ```
-new DevLogin(params)
+new DevAutoLogin(params)
 
 ```
 
 ## node
 
 ```
-const DevLogin = require('dev-auto-login');
+const DevAutoLogin = require('dev-auto-login');
 
 ```
 
 ```
-const devLogin = new DevLogin(params)
+const DevAutoLogin = new DevLogin(params)
+DevAutoLogin.run()
 
 ```
 # 配置
@@ -115,7 +116,7 @@ const devLogin = new DevLogin(params)
 
 # 示例
 ```
-new DevLogin(
+new DevAutoLogin(
     { // userOptions
         closeDefaultLogin: true,
         closeDefaultVerificationCode: true,
