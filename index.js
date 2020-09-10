@@ -53,14 +53,11 @@ class DevAutoLogin {
         }
         // this.run() // 启动
     }
-    async apply(compiler) { // 用于webpack调用
-        compiler.hooks.done.tapAsync('DevLoginPlugin', async function(compilation, callback) {
-            if (this[init]) {
-                callback()
-                return
+    apply(compiler) { // 用于webpack调用
+        compiler.hooks.done.tap('DevLoginPlugin', function(compilation) {
+            if (!this[init]) {
+                this.run()
             }
-            await this.run()
-            callback()
           }.bind(this));
     }
     async run () {
@@ -141,7 +138,7 @@ class DevAutoLogin {
         await this.callHook() // 进行获取原始登录凭证钩子调用
 
         await this.transferLoginCert(this.loginCert) // 转移凭证至最终的站点
-
+        console.log(1111111111111, this.userOptions.finalSiteUrl)
         await Promise.all([ // 跳转至最终的站点
             this.page.goto(this.userOptions.finalSiteUrl),
             this.page.waitForNavigation({
@@ -172,7 +169,6 @@ class DevAutoLogin {
             page.click(this.userOptions.verificationCodeBtnEl),
             page.waitForNavigation(['load', 'domcontentloaded', 'networkidle0'])
         ]);
-        
     }
     async makeLoginCert() {// 得到原始登录凭证
         this.loginCert = await this.page.cookies() // 拿到cookie
