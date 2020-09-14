@@ -72,17 +72,22 @@ DevAutoLogin.run()
 表示了使用者启动浏览器时使用的数据，默认参数如下：
 
 ```
+    // executablePath默认值 mac: '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
+    // executablePath默认值 windows: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe' 
+    // 其他情况下取mac的值
+    executablePath: '', // 可运行 Chromium 或 Chrome 可执行文件的路径
     ignoreHTTPSErrors: true, // 是否在导航期间忽略 HTTPS 错误. 默认是 false。
     headless: false,   // 有无浏览器界面启动
     slowMo: 0,       // 放慢浏览器执行速度，方便测试观察
     defaultViewport: null, // 为每个页面设置一个默认视口大小
+    ignoreDefaultArgs: ['--disable-extensions'], // 开启浏览器插件
     args: [  // 启动 Chromium 的参数
-        '--ignore-certificate-errors', // 忽略证书认证出错
-        '--ignore-ssl-errors',
-        '--disable-gpu',   // 禁用GPU加速      
-        '–no-sandbox', // 对通常为沙盒的所有进程类型禁用沙盒。仅用作测试目的的浏览器级别开关。
-        '--disable-setuid-sandbox', // 禁用setuid沙盒（仅限Linux）。
-        '--remote-debugging-port=9222',  // 浏览器端口
+            '--ignore-certificate-errors', // 忽略证书认证出错
+            '--ignore-ssl-errors',
+            '--disable-gpu',   // 禁用GPU加速
+            '--no-proxy-server', // 忽略代理
+            '--disable-setuid-sandbox',
+            '--remote-debugging-port=9222', // 端口
     ],
     dumpio: true  // 是否将浏览器进程标准输出和标准错误输入到 process.stdout 和 process.stderr 中
 ```
@@ -90,7 +95,7 @@ DevAutoLogin.run()
 
 [启动启动 Chromium 的参数参见](https://peter.sh/experiments/chromium-command-line-switches/)
 
- > 注意：`executablePath` 必须配置
+ > 注意：当默认的 `executablePath` 不能找到可以启动的 Chromium可执行文件时 必须配置
 
 例如
 ```
