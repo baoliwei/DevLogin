@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer-core');
+// var path = require('path')
 const {
 	AsyncSeriesHook
  } = require("tapable");
@@ -7,20 +8,22 @@ const {
 
 class DevAutoLogin {
     constructor(userOptions, browserOptions, plugins) { // 初始化
+        let args = [  // 启动 Chrome 的参数，详见上文中的介绍 
+            '--ignore-certificate-errors', // 忽略证书认证出错
+            '--ignore-ssl-errors',
+            '--disable-gpu',   // 禁用GPU加速      
+            // '–no-sandbox',
+            '--disable-setuid-sandbox',
+            '--remote-debugging-port=9222', 
+        ]
         const defaultBrowserOptions = {
             // executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', // 可运行 Chromium 或 Chrome 可执行文件的路径
             ignoreHTTPSErrors: true, // 是否在导航期间忽略 HTTPS 错误. 默认是 false。
             headless: false,   // 有无浏览器界面启动
             slowMo: 0,       // 放慢浏览器执行速度，方便测试观察
             defaultViewport: null,
-            args: [  // 启动 Chrome 的参数，详见上文中的介绍 
-                '--ignore-certificate-errors', // 忽略证书认证出错
-                '--ignore-ssl-errors',
-                '--disable-gpu',   // 禁用GPU加速      
-                '–no-sandbox',
-                '--disable-setuid-sandbox',
-                '--remote-debugging-port=9222', 
-            ],
+            ignoreDefaultArgs: ['--disable-extensions'], // 开启插件
+            args: args,
             dumpio: true 
         }
         const defaultUserOptions = { // 用于获取登录凭证的配置
@@ -40,7 +43,10 @@ class DevAutoLogin {
         }
         this[init] = false
         this.plugins = plugins instanceof Array ? plugins : [] // plugins必须是数组，数组项必须是函数。
-        this.browserOptions = Object.assign(defaultBrowserOptions, browserOptions, userOptions)
+        browserOptions.args instanceof Array ? browserOptions.args.push(...args): null
+        console.log(browserOptions.args)
+        this.browserOptions = Object.assign(defaultBrowserOptions, browserOptions)
+        console.log(this.browserOptions)
         this.userOptions = Object.assign(defaultUserOptions, userOptions)
 
         this.loginCert = [] // 登录凭证
@@ -187,7 +193,8 @@ class DevAutoLogin {
         }
     }
 }
-
+// let pp = path.join('D:', 'software', 'PageSpeed Insights')
+// console.log(pp)
 // new DevAutoLogin({ // userOptions
 //     closeDefaultLogin: false,
 //     closeDefaultVerificationCode: true,
@@ -199,7 +206,22 @@ class DevAutoLogin {
 //     verificationCode: '1' // 登录时的验证码
 // },
 // {
+//     args: [  // 启动 Chrome 的参数，详见上文中的介绍 
+//         '--allow-running-insecure-content', //允许不安全的脚本
+//         '--ignore-certificate-errors', // 忽略证书认证出错
+//         '--ignore-ssl-errors',
+//         '--disable-gpu',   // 禁用GPU加速      
+//         // '–no-sandbox',
+//         '--disable-setuid-sandbox',
+//         '--remote-debugging-port=9222', 
+//         '--flag-switches-begin',
+//         '--extensions-on-chrome-urls',
+//         '--flag-switches-end',
+//         '--enable-audio-service-sandbox',
+//         '--origin-trial-disabled-features=MeasureMemory',
+//         `--load-extension=${pp},C:\\Users\\baoliwei\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\ahfhijdlegdabablpippeagghigmibma\\0.3.0_0\\,C:\\Users\\baoliwei\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nmmhkkegccagdldgiimedpiccmgmieda\\1.0.0.5_0\\,C:\\Users\\baoliwei\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\pkedcjkdefgpdelpbcmbmeomcjbeemfm\\8420.518.0.2_0\\`
+//     ],
 //   executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
-// })
+// }).run()
 
 module.exports = DevAutoLogin;

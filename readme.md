@@ -99,6 +99,23 @@ DevAutoLogin.run()
     executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
 }
 ```
+> 注意：原浏览器的插件不会自动加载，需要配置，然后手动加载
+
+例如：
+
+```
+args: [ 
+        `--load-extension=${path}`  // 加载浏览器插件，path为插件的地址。
+    ],
+
+```
+
+插件地址的查找
+
+* 通过*加载已解压的扩展程序*的方式安装的插件，插件路径即加载的路径
+* 不是通过*加载已解压的扩展程序*的方式安装的插件，[查找插件路径请参考](https://blog.csdn.net/qq_38161040/article/details/87166139)
+
+
 ## plugins
 
 插件会运行在登录行为之前。
@@ -129,7 +146,9 @@ new DevAutoLogin(
     },
     { // browserOptions
     // 可运行 Chromium 或 Chrome 可执行文件的路径
-    executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+    executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    // 启动浏览器的参数，如下为加载插件示例，path为插件的路径
+    args: [`--load-extension=${path}]
     },
     [ // plugins
         function () {
