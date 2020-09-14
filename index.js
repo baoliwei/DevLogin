@@ -6,7 +6,7 @@ const {
  const init = Symbol('init')
 
 class DevAutoLogin {
-    constructor(userOptions, browserOptions, plugins) { // 初始化
+    constructor(userOptions = {}, browserOptions = {}, plugins = []) { // 初始化
         let args = [  // 启动 Chrome 的参数，详见上文中的介绍 
             '--ignore-certificate-errors', // 忽略证书认证出错
             '--ignore-ssl-errors',
@@ -205,13 +205,14 @@ class DevAutoLogin {
 //     closeDefaultLogin: false,
 //     closeDefaultVerificationCode: true,
 //     cookies:['session'], // 要获取的cookie名称
-//     originSiteUrl: 'http://hhr_oms_testing.shanyishanmei.com', // 要获取cookie的url
+//     originSiteUrl: 'url', // 要获取cookie的url
 //     finalSiteUrl: 'http://localhost:8000/', // 要设置cookie的url
 //     userName: 'songrui001', // 登录用户名
 //     password: 'aaa111', // 登录密码
 //     verificationCode: '1' // 登录时的验证码
 // },
 // {
+
 //     args: [  // 启动 Chrome 的参数，详见上文中的介绍 
 //         '--allow-running-insecure-content', //允许不安全的脚本
 //         '--ignore-certificate-errors', // 忽略证书认证出错
@@ -227,7 +228,9 @@ class DevAutoLogin {
 //         '--origin-trial-disabled-features=MeasureMemory',
 //         `--load-extension=${pp},C:\\Users\\baoliwei\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\ahfhijdlegdabablpippeagghigmibma\\0.3.0_0\\,C:\\Users\\baoliwei\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nmmhkkegccagdldgiimedpiccmgmieda\\1.0.0.5_0\\,C:\\Users\\baoliwei\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\pkedcjkdefgpdelpbcmbmeomcjbeemfm\\8420.518.0.2_0\\`
 //     ],
-//   executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
-// }).run()
+//     executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+//     }
+// 
+// ).run()
 
 module.exports = DevAutoLogin;
